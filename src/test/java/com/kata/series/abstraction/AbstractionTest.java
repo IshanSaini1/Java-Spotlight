@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class AbstractionTest {
 
 	@Test
-	public void AbstractionTest() {
+	public void AbstractionTests() {
 		Dog d1 = new Dog("Wolf", "Big", 100);
 		baseMethod(d1, "Slow");
 	}
