@@ -21,6 +21,12 @@ public class PredicateTest {
 		System.out.println(coords.size());
 		coords.removeIf(x -> (x[0] < 0 || x[1] < 0));
 		System.out.println(coords.size());
+
+		Predicate<String> p1 = (x) -> x.equals("Tim");
+		Predicate<String> p2 = (x) -> x.equalsIgnoreCase("Tim");
+		Predicate<String> p3 = (x) -> x.contains("1234");
+		Predicate<String> result = p1.and(p2).or(p3);
+		System.out.println(result.test("Tim"));
 	}
 
 }
