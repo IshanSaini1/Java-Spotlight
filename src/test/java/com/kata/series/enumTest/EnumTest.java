@@ -1,6 +1,6 @@
 package com.kata.series.enumTest;
 
-public class EnumTest {
+public  class EnumTest {
 
 	public enum Numbers {
 		ONE("I"), TWO("II"), THREE("III"), FOUR("IV"), FIVE("V"),SIX;
