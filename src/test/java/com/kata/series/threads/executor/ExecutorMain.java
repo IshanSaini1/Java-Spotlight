@@ -4,6 +4,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import org.springframework.web.bind.annotation.RestController;
+
 import com.kata.series.threads.ThreadColor;
 
 class ColorThreadFactory implements ThreadFactory {
