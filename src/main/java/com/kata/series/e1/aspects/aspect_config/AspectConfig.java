@@ -4,9 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
 
 import com.kata.series.e1.aspects.objects.Division;
 
+@Profile("NO_BOOT")
 @Configuration
 @ComponentScan(basePackages = { "com.kata.series.e1.aspects" })
 @EnableAspectJAutoProxy

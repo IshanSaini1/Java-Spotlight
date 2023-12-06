@@ -2,12 +2,14 @@ package com.kata.series.e1.challenge1.vehicle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.kata.series.e1.challenge1.speaker.Speaker;
 import com.kata.series.e1.challenge1.tyre.Tyre;
 
+@Profile("NO_BOOT")
 @Component
 public class VehicleService {
 

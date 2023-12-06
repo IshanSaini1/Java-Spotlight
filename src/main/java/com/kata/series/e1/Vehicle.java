@@ -1,10 +1,12 @@
 package com.kata.series.e1;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 
+@Profile("NO_BOOT")
 @Component
 public class Vehicle {
 	private String name;

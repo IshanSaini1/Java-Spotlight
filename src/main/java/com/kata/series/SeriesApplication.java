@@ -20,6 +20,7 @@ public class SeriesApplication {
 
 	}
 
+	@Deprecated
 	private static void method2(AnnotationConfigApplicationContext context) {
 		int a = new Random().nextInt(0, 10);
 		if (a % 2 == 0) {
@@ -45,6 +46,7 @@ public class SeriesApplication {
 		System.out.println(lucy);
 	}
 
+	@Deprecated
 	private static void method1(ApplicationContext context) {
 		String[] listOfVehicleTypes = context.getBeanNamesForType(Vehicle.class);
 		String beanName = (Arrays.stream(listOfVehicleTypes).findAny().isPresent())

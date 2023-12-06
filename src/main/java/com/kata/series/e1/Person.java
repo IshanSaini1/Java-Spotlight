@@ -2,8 +2,10 @@ package com.kata.series.e1;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+@Profile("NO_BOOT")
 @Component
 public class Person {
 

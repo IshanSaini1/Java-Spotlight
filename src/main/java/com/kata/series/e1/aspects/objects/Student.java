@@ -2,6 +2,7 @@ package com.kata.series.e1.aspects.objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.kata.series.e1.aspects.annotations.LogMethod;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Profile("NO_BOOT")
 @Component
 @Data
 @AllArgsConstructor
