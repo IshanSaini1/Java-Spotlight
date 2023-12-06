@@ -14,6 +14,8 @@ public class AspectMainClass {
 				+ studentDefault.getDivision().getDiv_class());
 
 		System.out.println(studentDefault.sayHello());
+
+		System.out.println(studentDefault.sayImportantMessage());
 	}
 
 }

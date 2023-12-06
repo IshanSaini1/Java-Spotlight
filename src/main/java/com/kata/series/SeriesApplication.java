@@ -3,31 +3,21 @@ package com.kata.series;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.kata.series.config.ProjConfig;
 import com.kata.series.e1.Person;
 import com.kata.series.e1.Vehicle;
 
+@SpringBootApplication
 public class SeriesApplication {
 
 	public static void main(String[] args) {
-		Vehicle v1 = new Vehicle();
-		v1.setName("Honda City V1");
-		System.out.println("NON SPRING IOC CONTEXT : " + v1);
 
-		var context = new AnnotationConfigApplicationContext(ProjConfig.class);
-		
-		Person p = context.getBean(Person.class);
-		System.out.println(p);
-		
+		SpringApplication.run(SeriesApplication.class, args);
 
-		// method2(context);
-
-		// method1(context);
-
-		// SpringApplication.run(SeriesApplication.class, args);
 	}
 
 	private static void method2(AnnotationConfigApplicationContext context) {
@@ -51,7 +41,7 @@ public class SeriesApplication {
 
 		// -----------------------------------------------//
 
-		Person lucy = context.getBean("lucy",Person.class);
+		Person lucy = context.getBean("lucy", Person.class);
 		System.out.println(lucy);
 	}
 
