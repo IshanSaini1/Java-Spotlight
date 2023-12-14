@@ -19,6 +19,9 @@ import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 public class SecurityConfigurations {
 
@@ -27,11 +30,15 @@ public class SecurityConfigurations {
 		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 		
 		http
-		.csrf(t -> t.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/saveMsg")))
+		.csrf(t -> t
+				.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/saveMsg"))
+				.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/public/**"))
+				)
 		.authorizeHttpRequests(
 					(req) -> req
 							.requestMatchers
 							(
+									mvcMatcherBuilder.pattern("/public/**"),
 									mvcMatcherBuilder.pattern("/closeMsg"),
 									mvcMatcherBuilder.pattern("/error"),
 									mvcMatcherBuilder.pattern("/home"), 

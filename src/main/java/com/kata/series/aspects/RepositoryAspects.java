@@ -25,7 +25,8 @@ public class RepositoryAspects {
 			log.error("Error while trying to log method : " + joinPoint.getSignature().toString());
 			throw new Throwable(e);
 		}
-		log.info("We got this object : "+returnable.toString());
+		if(null!=returnable)
+			log.info("We got this object : "+returnable.toString());
 		log.info("Ending method : " + joinPoint.getSignature().toString());
 		return returnable;
 	}
