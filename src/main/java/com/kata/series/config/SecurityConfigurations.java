@@ -38,6 +38,7 @@ public class SecurityConfigurations {
 					(req) -> req
 							.requestMatchers
 							(
+									mvcMatcherBuilder.pattern("/displayProfile"),
 									mvcMatcherBuilder.pattern("/public/**"),
 									mvcMatcherBuilder.pattern("/closeMsg"),
 									mvcMatcherBuilder.pattern("/error"),
