@@ -25,19 +25,22 @@ public class PersonToProfileMapper {
 		return profile;
 	}
 
-	public Person profileToPerson(Profile profile) {
-		Person person = new Person();
+	public Person profileToPerson(Person person ,Profile profile) {
 		person.setName(profile.getName());
 		person.setMobileNumber(profile.getMobileNumber());
 		person.setEmail(profile.getEmail());
+		person.setConfirmEmail(profile.getEmail());
+		person.setPwd(person.getPwd());
+		person.setConfirmPwd(person.getPwd());
 		// Map Address Fields
 		Address addr = new Address();
+		person.setAddress(addr);
 		addr.setAddress1(profile.getAddress1());
 		addr.setAddress2(profile.getAddress2());
 		addr.setCity(profile.getCity());
 		addr.setState(profile.getState());
 		addr.setZipCode(profile.getZipCode());
-		person.setAddress(addr);
+		
 		return person;
 	}
 }

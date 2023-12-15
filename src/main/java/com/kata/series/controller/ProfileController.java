@@ -48,7 +48,7 @@ public class ProfileController {
 			return "profile.html";
 		}
 		Person person = (Person) session.getAttribute("person");
-		PersonToProfileMapper.mapper.profileToPerson(profile);
+		PersonToProfileMapper.mapper.profileToPerson(person, profile);
 		person = personRepo.save(person);
 		session.setAttribute("person", person);
 		return "redirect:/displayProfile";
