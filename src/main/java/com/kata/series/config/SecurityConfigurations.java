@@ -52,6 +52,7 @@ public class SecurityConfigurations {
 									mvcMatcherBuilder.pattern("/logout"),
 									mvcMatcherBuilder.pattern("/displayMessages")
 							).permitAll()
+							.requestMatchers(mvcMatcherBuilder.pattern("/admin/**")).authenticated()
 							.requestMatchers(mvcMatcherBuilder.pattern("/courses")).authenticated()
 							.requestMatchers(mvcMatcherBuilder.pattern("/dashboard")).authenticated()
 							.requestMatchers(mvcMatcherBuilder.pattern("/assets/**")).permitAll()
