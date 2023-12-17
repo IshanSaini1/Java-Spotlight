@@ -1,16 +1,11 @@
 package com.kata.series.service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate5.SpringSessionContext;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import com.kata.series.constants.EazySchoolConstants;
@@ -29,7 +24,7 @@ public class ContactService {
 
 	@Autowired
 	private ContactRepository contactRepository;
-	
+
 	@Autowired
 	private ContactRepositoryJPA contactRepositoryJPA;
 
@@ -44,10 +39,10 @@ public class ContactService {
 		log.info("Message Saved " + contact.toString());
 		contact.setStatus(EazySchoolConstants.OPEN);
 		var result = contactRepositoryJPA.save(contact);
-		if( null!=result) {
+		if (null != result) {
 			isSaved = true;
 		}
-		log.info("Exiting : Save Success : "+ isSaved);
+		log.info("Exiting : Save Success : " + isSaved);
 		return isSaved;
 	}
 
@@ -59,19 +54,26 @@ public class ContactService {
 		this.counter = counter;
 	}
 
-	public List<Contact> findMsgsWithOpenStatus() {
-		return contactRepositoryJPA.findByStatus(EazySchoolConstants.OPEN);
+	public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
+		int pageSize = 5;
+		Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
+				sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
+		Page<Contact> msgPage = contactRepositoryJPA.findOpenMsg(EazySchoolConstants.OPEN, pageable);
+		return msgPage;
+		// contactRepositoryJPA.findByStatus(EazySchoolConstants.OPEN);
 	}
 
 	public void updateMsgStatus(int id, String name) {
-		Contact contact = contactRepositoryJPA.findById(id).orElseThrow(()-> new RuntimeException("No Contact found with this Id"));
-		contact.setStatus(EazySchoolConstants.CLOSE);
+		//// Contact contact = contactRepositoryJPA.findById(id).orElseThrow(()-> new
+		//// RuntimeException("No Contact found with this Id"));
+		//// contact.setStatus(EazySchoolConstants.CLOSE);
 		// Is now done by annotations and Audit Configuration in configs package
-		//contact.setUpdatedBy(name);
-		//contact.setUpdatedAt(LocalDateTime.now());
-		contactRepositoryJPA.save(contact);
-		//contactRepository.updateMsgStatus(id, EazySchoolConstants.CLOSE, name);
-		
+		// contact.setUpdatedBy(name);
+		// contact.setUpdatedAt(LocalDateTime.now());
+		//// contactRepositoryJPA.save(contact);
+		// contactRepository.updateMsgStatus(id, EazySchoolConstants.CLOSE, name);
+		int modifiedRows = contactRepositoryJPA.updateStatusById(id, EazySchoolConstants.CLOSE);
+		log.info("Modified Rows : " + modifiedRows);
 	}
 
 }

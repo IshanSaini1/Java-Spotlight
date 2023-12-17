@@ -33,6 +33,7 @@ public class SecurityConfigurations {
 		.csrf(t -> t
 				.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/saveMsg"))
 				.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/public/**"))
+				.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/api/**"))
 				)
 		.authorizeHttpRequests(
 					(req) -> req
@@ -50,8 +51,9 @@ public class SecurityConfigurations {
 									mvcMatcherBuilder.pattern("/about"),
 									mvcMatcherBuilder.pattern("/login"),
 									mvcMatcherBuilder.pattern("/logout"),
-									mvcMatcherBuilder.pattern("/displayMessages")
+									mvcMatcherBuilder.pattern("/displayMessages/**")
 							).permitAll()
+							.requestMatchers(mvcMatcherBuilder.pattern("/api/**")).authenticated()
 							.requestMatchers(mvcMatcherBuilder.pattern("/admin/**")).authenticated()
 							.requestMatchers(mvcMatcherBuilder.pattern("/courses")).authenticated()
 							.requestMatchers(mvcMatcherBuilder.pattern("/dashboard")).authenticated()
