@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kata.series.model.Courses;
 import com.kata.series.model.EazyClass;
 import com.kata.series.model.Person;
+import com.kata.series.repository.CoursesRepository;
 import com.kata.series.repository.EazyClassRepository;
 import com.kata.series.repository.PersonRepository;
 import com.kata.series.service.AdminService;
@@ -36,6 +38,9 @@ public class AdminController {
 
 	@Autowired
 	private EazyClassRepository eazyClassRepo;
+
+	@Autowired
+	private CoursesRepository courseRepository;
 
 	@RequestMapping("/displayClasses")
 	public ModelAndView displayClasses(Model model) {
@@ -105,4 +110,48 @@ public class AdminController {
 		return modelAndView;
 	}
 
+	@GetMapping("/displayCourses")
+	public ModelAndView displayCourses(Model model) {
+		List<Courses> courses = courseRepository.findAll();
+		ModelAndView modelAndView = new ModelAndView("courses_secure.html");
+		modelAndView.addObject("courses", courses);
+		model.addAttribute("course", new Courses());
+		return modelAndView;
+	}
+
+	@PostMapping("/addNewCourse")
+	public ModelAndView addNewCourse(Model model, @ModelAttribute("course") Courses course) {
+		ModelAndView modelAndView = new ModelAndView();
+		courseRepository.save(course);
+		modelAndView.setViewName("redirect:/admin/displayCourses");
+		return modelAndView;
+	}
+
+	@GetMapping("/viewStudents")
+	public ModelAndView viewStudents(Model model, @RequestParam int id, HttpSession session,
+			@RequestParam(value = "error", required = false) String error) {
+		ModelAndView modelAndView = new ModelAndView("course_students.html");
+		Courses course = courseRepository.findById(id).get();
+		modelAndView.addObject("courses", course);
+		modelAndView.addObject("person", new Person());
+		session.setAttribute("courses", course);
+		return modelAndView;
+	}
+
+	@PostMapping("/addStudentToCourse")
+	public ModelAndView addStudentToCourse(Model model, @ModelAttribute("person") Person person, HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		Courses courses = (Courses) session.getAttribute("courses");
+		Person personEntity = personRepo.findByEmail(person.getEmail());
+		if (null == person || person.getPersonId() < 0) {
+			modelAndView.setViewName("redirect:/admin/viewStudents?id=" + courses.getCourseId() + "&error=true");
+			return modelAndView;
+		}
+		personEntity.getCourses().add(courses);
+		courses.getPersons().add(personEntity);
+		session.setAttribute("courses", courses);
+		personRepo.save(personEntity);
+		modelAndView.setViewName("redirect:/admin/viewStudent?id=" + courses.getCourseId());
+		return modelAndView;
+	}
 }
