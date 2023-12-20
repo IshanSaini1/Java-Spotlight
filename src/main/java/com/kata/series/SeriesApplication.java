@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -13,6 +14,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import com.kata.series.e1.Person;
 import com.kata.series.e1.Vehicle;
 
+
+@EnableFeignClients(basePackages = "com.kata.series.separate.application")
 @EnableAspectJAutoProxy
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditAwareConfiguration")

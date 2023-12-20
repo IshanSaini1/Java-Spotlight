@@ -8,6 +8,9 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -16,6 +19,7 @@ import lombok.Data;
 @Data
 @MappedSuperclass
 @EntityListeners(value = AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdAt","createdBy","updatedAt"})
 public class BaseEntity {
 
 	@CreatedDate
@@ -29,6 +33,7 @@ public class BaseEntity {
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
+	@JsonIgnore
 	@LastModifiedBy
 	private String updatedBy;
 }
