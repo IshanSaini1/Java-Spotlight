@@ -10,11 +10,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.kata.series.e1.Person;
 import com.kata.series.e1.Vehicle;
 
 
+@EnableScheduling
 @EnableFeignClients(basePackages = "com.kata.series.separate.application")
 @EnableAspectJAutoProxy
 @SpringBootApplication

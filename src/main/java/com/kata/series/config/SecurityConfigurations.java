@@ -39,6 +39,7 @@ public class SecurityConfigurations {
 					(req) -> req
 							.requestMatchers
 							(
+									mvcMatcherBuilder.pattern("/kafka/**"),
 									mvcMatcherBuilder.pattern("/updateProfile"),
 									mvcMatcherBuilder.pattern("/displayProfile"),
 									mvcMatcherBuilder.pattern("/public/**"),
