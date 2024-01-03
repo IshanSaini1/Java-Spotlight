@@ -18,9 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kata.series.kafka.modules.entity.Commodity;
 import com.kata.series.kafka.modules.entity.Employee;
+import com.kata.series.kafka.modules.entity.FoodOrder;
+import com.kata.series.kafka.modules.entity.SimpleNumber;
 import com.kata.series.kafka.modules.producers.EmployeeProducer;
+import com.kata.series.kafka.modules.producers.FoodOrderProducer;
 import com.kata.series.kafka.modules.producers.HelloKafkaProducer;
+import com.kata.series.kafka.modules.producers.InvoiceProducer;
 import com.kata.series.kafka.modules.producers.KafkaKeyProducer;
+import com.kata.series.kafka.modules.producers.SimpleNumberProducer;
+import com.kata.series.service.ImageService;
+import com.kata.series.service.InvoiceService;
 import com.kata.series.service.PaymentRequestService;
 import com.kata.series.service.PurchaseRequestService;
 import com.kata.series.service.generators.CommoditySupplier;
@@ -37,6 +44,9 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaBasicController {
 
 	@Autowired
+	private InvoiceService invoiceService;
+
+	@Autowired
 	private HelloKafkaProducer producer;
 
 	@Autowired
@@ -44,6 +54,9 @@ public class KafkaBasicController {
 
 	@Autowired
 	private EmployeeProducer employeeProducer;
+
+	@Autowired
+	private FoodOrderProducer foodOrderProducer;
 
 	@Autowired
 	GeneratorUtils generateUtils;
@@ -56,9 +69,18 @@ public class KafkaBasicController {
 
 	@Autowired
 	PurchaseRequestService purchaseRequestService;
-	
+
 	@Autowired
 	PaymentRequestService paymentRequestService;
+
+	@Autowired
+	SimpleNumberProducer simpleNumberProducer;
+
+	@Autowired
+	ImageService imageService;
+
+	@Autowired
+	InvoiceProducer invoiceProducer;
 
 	@GetMapping("/msg-1")
 	public String sendKafkaMessage(@RequestParam("name") String name, HttpServletRequest request, HttpSession session) {
@@ -107,10 +129,74 @@ public class KafkaBasicController {
 		String val = purchaseRequestService.sendPurchaseRequests();
 		return ResponseEntity.status(HttpStatus.OK).body(val);
 	}
-	
+
 	@GetMapping("/payment-request")
 	public ResponseEntity<String> sendPaymentRequests() throws Exception {
 		String val = paymentRequestService.sendPaymentRequests();
 		return ResponseEntity.status(HttpStatus.OK).body(val);
+	}
+
+	@GetMapping("/food-order")
+	public ResponseEntity<String> sendFoodOrder() throws JsonProcessingException {
+		FoodOrder chicken = new FoodOrder(3, "Chicken");
+		FoodOrder fish = new FoodOrder(10, "Fish");
+		FoodOrder pizza = new FoodOrder(5, "Pizza");
+
+		foodOrderProducer.send(chicken);
+		foodOrderProducer.send(fish);
+		foodOrderProducer.send(pizza);
+
+		return ResponseEntity.status(HttpStatus.OK).body("Message Sent to Kafka");
+	}
+
+	@GetMapping("/food-order-global")
+	public ResponseEntity<String> sendFoodOrderGlabal() throws JsonProcessingException {
+		FoodOrder chicken = new FoodOrder(3, "Chicken");
+		FoodOrder fish = new FoodOrder(10, "Fish");
+		FoodOrder pizza = new FoodOrder(5, "Pizza");
+
+		foodOrderProducer.send(chicken);
+		foodOrderProducer.send(fish);
+		foodOrderProducer.send(pizza);
+
+		for (int i = 0; i < 3; i++) {
+			simpleNumberProducer.sendSimpleNumber(new SimpleNumber(i));
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body("Message Sent to Kafka");
+	}
+
+	@GetMapping("/img1")
+	public ResponseEntity<String> sendImages() throws JsonProcessingException {
+		var img1 = imageService.generateImage("jpg");
+		var img2 = imageService.generateImage("svg");
+		var img3 = imageService.generateImage("png");
+		var img4 = imageService.generateImage("gif");
+		var img5 = imageService.generateImage("bmp");
+		var img6 = imageService.generateImage("tiff");
+
+		imageService.sendImage(img1, 0);
+		imageService.sendImage(img2, 0);
+		imageService.sendImage(img3, 0);
+
+		imageService.sendImage(img4, 1);
+		imageService.sendImage(img5, 1);
+		imageService.sendImage(img6, 1);
+
+		return ResponseEntity.status(HttpStatus.OK).body("Images have been sent");
+
+	}
+
+	@GetMapping("/invoices-1")
+	public ResponseEntity<String> sendInvoices() throws JsonProcessingException {
+		for (int i = 0; i < 10; i++) {
+			var invoice = invoiceService.generateInvoice();
+			if (i > 5) {
+				invoice.setAmount(0);
+			}
+			invoiceProducer.send(invoice);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("The invoices have been sent.");
+
 	}
 }
